@@ -1,88 +1,86 @@
-# testing
+# Next.js + Express Starter
 
-A [Turborepo](https://turborepo.dev) monorepo with a Next.js frontend and Express API backend.
+A reusable [Turborepo](https://turborepo.dev) monorepo starter with a Next.js frontend, Express API, and shared tooling — clone it and build your next project on top.
 
-## What's inside?
+## Stack
 
-### Apps and Packages
+| Layer | Tech |
+|-------|------|
+| Frontend | [Next.js](https://nextjs.org/) (`apps/web`) |
+| Backend | [Express](https://expressjs.com/) + MongoDB (`apps/api`) |
+| Monorepo | [Turborepo](https://turborepo.dev) + [pnpm](https://pnpm.io) workspaces |
+| Tooling | TypeScript, ESLint, Prettier, Husky |
 
-- `web`: a [Next.js](https://nextjs.org/) app
-- `api`: an [Express](https://expressjs.com/) + MongoDB API
-- `@repo/ui`: a shared React component library used by `web`
-- `@repo/eslint-config`: shared ESLint configurations
-- `@repo/typescript-config`: shared `tsconfig.json` presets
-- `@repo/prettier-config`: shared Prettier configuration
+## What's inside
 
-Each package/app is written in [TypeScript](https://www.typescriptlang.org/).
+### Apps
 
-### Utilities
+- `web` — Next.js frontend
+- `api` — Express API with health checks (`/health`, `/health/live`, `/health/ready`)
 
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
-- [pnpm](https://pnpm.io) for package management
+### Shared packages
 
-## Getting started
+- `@repo/eslint-config` — ESLint presets (Next.js + Node)
+- `@repo/typescript-config` — shared `tsconfig` presets
+- `@repo/prettier-config` — shared Prettier rules
 
-Install dependencies from the repo root:
+## Quick start
 
 ```sh
+# 1. Clone and install
+git clone <your-repo-url> my-app
+cd my-app
 pnpm install
-```
 
-## Build
+# 2. Configure the API
+cp apps/api/env.example apps/api/.env
 
-Build all apps and packages:
-
-```sh
-pnpm build
-```
-
-Build a specific app:
-
-```sh
-pnpm exec turbo build --filter=web
-pnpm exec turbo build --filter=api
-```
-
-## Develop
-
-Run all apps in dev mode:
-
-```sh
+# 3. Run everything
 pnpm dev
 ```
 
-Run a specific app:
+- Web: [http://localhost:3000](http://localhost:3000)
+- API: [http://localhost:5001](http://localhost:5001)
+- API docs: [http://localhost:5001/api-docs](http://localhost:5001/api-docs)
+
+## Scripts
+
+| Command | Description |
+|---------|-------------|
+| `pnpm dev` | Start all apps in dev mode |
+| `pnpm build` | Production build |
+| `pnpm lint` | ESLint across the repo |
+| `pnpm format` | Auto-format with Prettier |
+| `pnpm format:check` | Check formatting (CI-friendly) |
+| `pnpm check-types` | TypeScript type checking |
+| `pnpm validate` | lint + format:check + check-types |
+
+Run a single app:
 
 ```sh
 pnpm exec turbo dev --filter=web
 pnpm exec turbo dev --filter=api
 ```
 
-## Lint, format, and type check
-
-```sh
-pnpm lint
-pnpm format
-pnpm format:check
-pnpm check-types
-pnpm validate   # lint + format:check + check-types (same as pre-commit hook)
-```
-
 ## Git hooks (Husky)
 
-Hooks run automatically after `pnpm install` (via the `prepare` script):
+Installed automatically via `pnpm install`:
 
 | Hook | Runs |
 |------|------|
-| **pre-commit** | `pnpm validate` → lint, format:check, check-types |
+| **pre-commit** | `pnpm validate` |
 | **pre-push** | `pnpm build` |
 
-## Useful Links
+## Reusing this starter
 
-- [Tasks](https://turborepo.dev/docs/crafting-your-repository/running-tasks)
-- [Caching](https://turborepo.dev/docs/crafting-your-repository/caching)
-- [Filtering](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters)
-- [Configuration Options](https://turborepo.dev/docs/reference/configuration)
-- [CLI Usage](https://turborepo.dev/docs/reference/command-line-reference)
+1. Clone or fork this repo
+2. Rename the root `name` in `package.json` to your project name
+3. Update `apps/api/.env` with your MongoDB URI and secrets
+4. Build your features in `apps/web` and `apps/api`
+5. Add shared code under `packages/` as needed
+
+## Useful links
+
+- [Turborepo tasks](https://turborepo.dev/docs/crafting-your-repository/running-tasks)
+- [Turborepo caching](https://turborepo.dev/docs/crafting-your-repository/caching)
+- [pnpm workspaces](https://pnpm.io/workspaces)

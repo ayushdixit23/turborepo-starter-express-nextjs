@@ -1,5 +1,5 @@
 {
-  "name": "testing",
+  "name": "next-express-starter",
   "private": true,
   "scripts": {
     "build": "turbo run build",
