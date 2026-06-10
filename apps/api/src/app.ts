@@ -15,7 +15,6 @@ import {
 } from './config/middlewares/index.js';
 import setupSwagger from './config/swagger.js';
 import allAppRoutes from './routes/index.js';
-import rootRoutes from './routes/root.routes.js';
 
 const createApp = (): express.Application => {
   const app = express();
@@ -45,8 +44,6 @@ const createApp = (): express.Application => {
   }
 
   setupSwagger(app);
-
-  app.use('/', rootRoutes);
 
   app.use('/', allAppRoutes);
 
