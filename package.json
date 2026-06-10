@@ -1,0 +1,26 @@
+{
+  "name": "testing",
+  "private": true,
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "format": "turbo run format",
+    "format:check": "turbo run format:check",
+    "check-types": "turbo run check-types",
+    "validate": "turbo run lint format:check check-types",
+    "prepare": "husky"
+  },
+  "prettier": "@repo/prettier-config",
+  "devDependencies": {
+    "@repo/prettier-config": "workspace:*",
+    "husky": "^9.1.7",
+    "prettier": "^3.7.4",
+    "turbo": "^2.9.17",
+    "typescript": "5.9.2"
+  },
+  "packageManager": "pnpm@9.0.0",
+  "engines": {
+    "node": ">=18"
+  }
+}
