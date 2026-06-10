@@ -7,8 +7,7 @@ import { ERROR_CODES } from '../core/errors/errorCodes.js';
 import { SuccessResponse } from '../core/responses/SuccessResponse.js';
 
 export const getHealth = (req: Request, res: Response): Response => {
-  const databaseConnected =
-    mongoose.connection.readyState === mongoose.ConnectionStates.connected;
+  const databaseConnected = mongoose.connection.readyState === mongoose.ConnectionStates.connected;
   const memoryUsage = process.memoryUsage();
 
   const payload = {
@@ -43,8 +42,7 @@ export const getLiveness = (req: Request, res: Response): Response => {
 };
 
 export const getReadiness = (req: Request, res: Response): Response => {
-  const databaseConnected =
-    mongoose.connection.readyState === mongoose.ConnectionStates.connected;
+  const databaseConnected = mongoose.connection.readyState === mongoose.ConnectionStates.connected;
   const memoryUsage = process.memoryUsage();
   const memoryPercent = (memoryUsage.heapUsed / memoryUsage.heapTotal) * 100;
 

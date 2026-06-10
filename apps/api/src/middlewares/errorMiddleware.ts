@@ -1,4 +1,4 @@
-import { NextFunction,Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 
 import { normalizeError } from '../core/errors/errorHandler.js';
 import { ErrorPayload } from '../core/responses/ApiResponse.js';

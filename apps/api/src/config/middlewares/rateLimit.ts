@@ -1,6 +1,6 @@
 import { rateLimit } from 'express-rate-limit';
 
-import { RATE_LIMIT_MAX_REQUESTS,RATE_LIMIT_WINDOW_MS } from '../../config/env.js';
+import { RATE_LIMIT_MAX_REQUESTS, RATE_LIMIT_WINDOW_MS } from '../../config/env.js';
 import { AppError } from '../../core/errors/AppError.js';
 import { ERROR_CODES } from '../../core/errors/errorCodes.js';
 

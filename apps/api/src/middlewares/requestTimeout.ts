@@ -1,4 +1,4 @@
-import { NextFunction,Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 
 import { AppError } from '../core/errors/AppError.js';
 import { ERROR_CODES } from '../core/errors/errorCodes.js';
