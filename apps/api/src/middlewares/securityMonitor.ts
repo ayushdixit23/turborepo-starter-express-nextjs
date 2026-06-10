@@ -1,4 +1,5 @@
-import { Request, Response, NextFunction } from 'express';
+import { NextFunction,Request, Response } from 'express';
+
 import { logger } from '../utils/logger.js';
 
 interface SuspiciousActivity {
@@ -39,7 +40,7 @@ const checkSuspiciousActivity = (req: Request): SuspiciousActivity[] => {
     activities.push({
       type: 'LARGE_PAYLOAD',
       severity: 'medium',
-      message: `Unusually large payload: ${contentLength} bytes`,
+      message: `Unusually large payload: ${String(contentLength)} bytes`,
     });
   }
 

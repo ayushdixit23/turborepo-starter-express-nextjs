@@ -1,6 +1,6 @@
-import { PORT, MONGO_URI, NODE_ENV } from './config/env.js';
-import connectDb from './config/database.js';
 import createApp from './app.js';
+import connectDb from './config/database.js';
+import { MONGO_URI, NODE_ENV, PORT } from './config/env.js';
 import { setupGracefulShutdown } from './utils/gracefulShutdown.js';
 import { logger } from './utils/logger.js';
 
@@ -30,4 +30,4 @@ const startServer = async (): Promise<void> => {
   }
 };
 
-startServer();
+void startServer();

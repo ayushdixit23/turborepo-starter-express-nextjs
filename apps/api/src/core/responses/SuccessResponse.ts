@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+
 import { SuccessPayload } from './ApiResponse.js';
 
 export class SuccessResponse<TData> {
@@ -19,6 +20,6 @@ export class SuccessResponse<TData> {
       },
     };
 
-    return res.status(this.statusCode).json(payload);
+    return res.status(this.statusCode).json(payload) as Response<SuccessPayload<TData>>;
   }
 }

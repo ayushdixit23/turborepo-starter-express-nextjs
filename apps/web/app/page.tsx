@@ -1,4 +1,5 @@
 import Image, { type ImageProps } from 'next/image';
+
 import styles from './page.module.css';
 
 type Props = Omit<ImageProps, 'src'> & {
@@ -28,7 +29,7 @@ export default function Home() {
           alt="Turborepo logo"
           width={180}
           height={38}
-          priority
+          preload
         />
         <ol>
           <li>

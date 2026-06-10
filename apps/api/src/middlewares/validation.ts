@@ -1,12 +1,13 @@
-import { Request, Response, NextFunction } from 'express';
-import { ZodSchema, ZodError } from 'zod';
+import { NextFunction,Request, Response } from 'express';
+import { ZodError,type ZodType } from 'zod';
+
 import { AppError } from '../core/errors/AppError.js';
 import { ERROR_CODES } from '../core/errors/errorCodes.js';
 
 type RequestSchemas = {
-  body?: ZodSchema;
-  params?: ZodSchema;
-  query?: ZodSchema;
+  body?: ZodType;
+  params?: ZodType;
+  query?: ZodType;
 };
 
 const mapZodIssues = (zodError: ZodError) => {

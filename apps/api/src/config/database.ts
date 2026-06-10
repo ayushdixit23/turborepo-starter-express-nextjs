@@ -1,11 +1,12 @@
 import mongoose from 'mongoose';
+
 import { logger } from '../utils/logger.js';
 import {
+  MONGO_MAX_IDLE_TIME_MS,
   MONGO_MAX_POOL_SIZE,
   MONGO_MIN_POOL_SIZE,
-  MONGO_SOCKET_TIMEOUT_MS,
   MONGO_SERVER_SELECTION_TIMEOUT_MS,
-  MONGO_MAX_IDLE_TIME_MS,
+  MONGO_SOCKET_TIMEOUT_MS,
 } from './env.js';
 
 const connectDb = async (dbUrl: string): Promise<void> => {

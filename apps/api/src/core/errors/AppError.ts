@@ -1,4 +1,4 @@
-import { ErrorCode, ERROR_CODES } from './errorCodes.js';
+import { ERROR_CODES,ErrorCode } from './errorCodes.js';
 
 export type ErrorDetail = {
   field?: string;

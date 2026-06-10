@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express';
+import { NextFunction,Request, Response } from 'express';
 
 const dangerousPatterns = [
   /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,
@@ -40,7 +40,8 @@ const sanitizeValue = (value: unknown): unknown => {
 
 export const sanitizeMiddleware = (req: Request, _res: Response, next: NextFunction): void => {
   if (req.body && typeof req.body === 'object') {
-    req.body = sanitizeValue(req.body) as typeof req.body;
+    const sanitized = sanitizeValue(req.body);
+    req.body = sanitized;
   }
 
   next();

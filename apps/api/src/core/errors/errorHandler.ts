@@ -20,6 +20,10 @@ const getValidationDetails = (error: UnknownError): ErrorDetail[] => {
   }));
 };
 
+const isUnknownError = (error: unknown): error is UnknownError => {
+  return typeof error === 'object' && error !== null;
+};
+
 export const normalizeError = (error: unknown): AppError => {
   if (error instanceof AppError) {
     return error;
@@ -29,24 +33,26 @@ export const normalizeError = (error: unknown): AppError => {
     return new AppError('Malformed JSON body', 400, ERROR_CODES.INVALID_JSON_FORMAT);
   }
 
-  const err = error as UnknownError;
+  if (!isUnknownError(error)) {
+    return new AppError('Internal Server Error', 500, ERROR_CODES.INTERNAL_SERVER_ERROR);
+  }
 
-  if (err?.name === 'ValidationError') {
-    const details = getValidationDetails(err);
+  if (error.name === 'ValidationError') {
+    const details = getValidationDetails(error);
     return new AppError('Validation failed', 400, ERROR_CODES.VALIDATION_FAILED, details);
   }
 
-  if (err?.name === 'CastError') {
+  if (error.name === 'CastError') {
     return new AppError(
       'Invalid identifier format',
       400,
       ERROR_CODES.INVALID_REQUEST,
-      err.path ? [{ field: err.path, message: 'Invalid value' }] : undefined,
+      error.path ? [{ field: error.path, message: 'Invalid value' }] : undefined,
     );
   }
 
-  if (err?.code === 11000) {
-    const duplicateField = Object.keys(err.keyValue ?? {})[0];
+  if (error.code === 11000) {
+    const duplicateField = Object.keys(error.keyValue ?? {})[0];
     return new AppError(
       'Duplicate value found',
       409,
@@ -58,7 +64,7 @@ export const normalizeError = (error: unknown): AppError => {
   }
 
   return new AppError(
-    err?.message || 'Internal Server Error',
+    error.message || 'Internal Server Error',
     500,
     ERROR_CODES.INTERNAL_SERVER_ERROR,
   );

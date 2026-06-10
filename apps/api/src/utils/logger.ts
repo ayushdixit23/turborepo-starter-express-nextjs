@@ -1,4 +1,5 @@
 import pino from 'pino';
+
 import { NODE_ENV } from '../config/env.js';
 
 export const logger = pino({

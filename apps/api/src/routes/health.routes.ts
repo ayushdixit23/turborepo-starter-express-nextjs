@@ -1,6 +1,7 @@
 import { Router } from 'express';
-import asyncHandler from '../middlewares/tryCatch.js';
+
 import { getHealth, getLiveness, getReadiness } from '../controllers/health.controller.js';
+import asyncHandler from '../middlewares/tryCatch.js';
 
 const router = Router();
 

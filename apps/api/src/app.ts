@@ -1,19 +1,20 @@
 import express from 'express';
+
 import { NODE_ENV } from './config/env.js';
+import {
+  compressionMiddleware,
+  corsMiddleware,
+  helmetMiddleware,
+  rateLimitMiddleware,
+} from './config/middlewares/index.js';
+import setupSwagger from './config/swagger.js';
 import { errorMiddleware } from './middlewares/errorMiddleware.js';
 import { notFoundMiddleware } from './middlewares/notFound.js';
-import { traceIdMiddleware } from './middlewares/traceId.js';
 import { requestLogger } from './middlewares/requestLogger.js';
 import { requestTimeout } from './middlewares/requestTimeout.js';
 import { sanitizeMiddleware } from './middlewares/sanitize.js';
 import { securityMonitor } from './middlewares/securityMonitor.js';
-import {
-  helmetMiddleware,
-  corsMiddleware,
-  rateLimitMiddleware,
-  compressionMiddleware,
-} from './config/middlewares/index.js';
-import setupSwagger from './config/swagger.js';
+import { traceIdMiddleware } from './middlewares/traceId.js';
 import allAppRoutes from './routes/index.js';
 
 const createApp = (): express.Application => {

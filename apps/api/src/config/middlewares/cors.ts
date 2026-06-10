@@ -1,5 +1,6 @@
 import cors, { CorsOptions } from 'cors';
 import { RequestHandler } from 'express';
+
 import { ALLOWED_ORIGINS } from '../../config/env.js';
 
 const corsOptions: CorsOptions = {
