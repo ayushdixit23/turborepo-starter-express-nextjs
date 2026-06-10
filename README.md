@@ -28,8 +28,8 @@ A reusable [Turborepo](https://turborepo.dev) monorepo starter with a Next.js fr
 
 ```sh
 # 1. Clone and install
-git clone <your-repo-url> my-app
-cd my-app
+git clone https://github.com/ayushdixit23/turborepo-starter-express-nextjs
+cd turborepo-starter-express-nextjs
 pnpm install
 
 # 2. Configure the API
