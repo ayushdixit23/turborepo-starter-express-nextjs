@@ -24,6 +24,8 @@ const isUnknownError = (error: unknown): error is UnknownError => {
   return typeof error === 'object' && error !== null;
 };
 
+const GENERIC_ERROR_MESSAGE = 'Something went wrong! Please try again later.';
+
 export const normalizeError = (error: unknown): AppError => {
   if (error instanceof AppError) {
     return error;
@@ -34,7 +36,7 @@ export const normalizeError = (error: unknown): AppError => {
   }
 
   if (!isUnknownError(error)) {
-    return new AppError('Internal Server Error', 500, ERROR_CODES.INTERNAL_SERVER_ERROR);
+    return new AppError(GENERIC_ERROR_MESSAGE, 500, ERROR_CODES.INTERNAL_SERVER_ERROR);
   }
 
   if (error.name === 'ValidationError') {
@@ -63,9 +65,5 @@ export const normalizeError = (error: unknown): AppError => {
     );
   }
 
-  return new AppError(
-    error.message || 'Internal Server Error',
-    500,
-    ERROR_CODES.INTERNAL_SERVER_ERROR,
-  );
+  return new AppError(GENERIC_ERROR_MESSAGE, 500, ERROR_CODES.INTERNAL_SERVER_ERROR);
 };

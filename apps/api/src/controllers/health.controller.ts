@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import mongoose from 'mongoose';
 import os from 'os';
 
+import { NODE_ENV } from '../config/env.js';
 import { AppError } from '../core/errors/AppError.js';
 import { ERROR_CODES } from '../core/errors/errorCodes.js';
 import { SuccessResponse } from '../core/responses/SuccessResponse.js';
@@ -12,7 +13,7 @@ export const getHealth = (req: Request, res: Response): Response => {
 
   const payload = {
     uptime: process.uptime(),
-    environment: process.env.NODE_ENV || 'development',
+    environment: NODE_ENV,
     services: {
       database: databaseConnected ? 'connected' : 'disconnected',
     },

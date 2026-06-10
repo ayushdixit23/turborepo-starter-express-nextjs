@@ -1,3 +1,7 @@
+import type { ErrorDetail } from '../errors/AppError.js';
+
+export type { ErrorDetail };
+
 export type SuccessMetadata = {
   timestamp: string;
   traceId: string;
@@ -8,11 +12,6 @@ export type SuccessPayload<TData> = {
   message: string;
   data: TData;
   metadata: SuccessMetadata;
-};
-
-export type ErrorDetail = {
-  field?: string;
-  message: string;
 };
 
 export type ErrorPayload = {
