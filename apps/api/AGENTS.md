@@ -1,5 +1,7 @@
 # AGENTS.md - Express API Server
 
+> Cursor agents: see `.cursor/rules/code-quality.mdc` (always on) and `.cursor/rules/api-architecture.mdc` (API files).
+
 ## Developer Commands
 
 ```bash

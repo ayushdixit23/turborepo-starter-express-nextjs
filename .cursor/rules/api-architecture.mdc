@@ -1,0 +1,55 @@
+---
+description: Express API layering and thin-handler conventions
+globs: apps/api/**/*.ts
+alwaysApply: false
+---
+
+# API Architecture
+
+See `apps/api/AGENTS.md` for full detail and Express 5 gotchas.
+
+## Request flow
+
+```
+routes → asyncHandler(controller) → services → SuccessResponse / throw AppError
+```
+
+| Layer | Location | Responsibility | Line budget |
+|-------|----------|----------------|-------------|
+| Routes | `src/routes/` | HTTP wiring only; wrap with `asyncHandler` | ~30 lines |
+| Controllers | `src/controllers/` | Parse request, call service, return response | ~50 lines; no business rules |
+| Services | `src/services/` | Business logic, orchestration | main home for complexity |
+| Middlewares | `src/middlewares/` | Cross-cutting concerns only | one concern per file |
+| Config | `src/config/env.ts` | **Only** place to read env vars | — |
+
+Create `src/services/` when handler logic goes beyond trivial passthrough (multi-step checks, external calls, aggregation).
+
+## ESM conventions
+
+- `"type": "module"` — relative imports use `.js` extension (NodeNext)
+- Named exports for middleware/controllers; default export for route routers
+
+## Responses
+
+Never invent a new response shape.
+
+```typescript
+// Success
+return new SuccessResponse('Health check passed', payload).send(req, res);
+
+// Error — handled by errorMiddleware
+throw new AppError('Not found', 404, ERROR_CODES.RESOURCE_NOT_FOUND);
+```
+
+## Validation
+
+- Use `validateRequest` from `src/middlewares/validation.ts` with Zod schemas
+- Express 5: `req.query` and `req.params` are read-only — do not reassign them
+- Zod 4: use `.parse()`, not `.parseAsync()`
+
+## Adding features
+
+1. Route in `src/routes/`
+2. Controller in `src/controllers/`
+3. Service in `src/services/` (when logic grows beyond trivial)
+4. Zod schema in `src/core/validation/schemas/` (when input validation needed)

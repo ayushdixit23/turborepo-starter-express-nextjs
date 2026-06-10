@@ -1,0 +1,42 @@
+---
+description: Core modularity and cleanliness standards for all agent-written code
+alwaysApply: true
+---
+
+# Code Quality
+
+Write modular, readable code. ESLint enforces hard limits; these rules are stricter agent guidance.
+
+## Size limits
+
+| Target | Limit |
+|--------|-------|
+| File (`.ts`/`.tsx`) | Soft 150 lines — split before growing further; hard 250 (ESLint) |
+| Function | ~40 lines — extract helpers or modules |
+| Nesting | Max 3 levels of `if`/`for`/`try` — use early returns and guard clauses |
+
+## Control flow
+
+- **3+ branches** on the same variable → `Record` lookup, `switch`, strategy map, or polymorphism
+- **Same logic in 2+ places** → extract shared function/module before adding a third copy
+- Prefer composition over giant conditionals
+
+```typescript
+// BAD — duplicated readiness logic across handlers
+if (!databaseConnected) { throw new AppError(...); }
+if (memoryPercent > 90) { throw new AppError(...); }
+
+// GOOD — extracted predicate + single throw site
+function assertReady(): void {
+  if (!isDatabaseConnected()) throw readinessError('database', '...');
+  if (isMemoryCritical()) throw readinessError('memory', '...');
+}
+```
+
+## Agent behaviors
+
+- Before a file passes 150 lines, stop and split — do not keep appending
+- Create the right file (service, util, component) instead of inflating an existing handler
+- Minimal diff — no unrelated refactors mixed with a bugfix
+- Name intent; use constants for magic numbers; delete dead code and commented-out blocks
+- Do not add abstractions for one-off logic

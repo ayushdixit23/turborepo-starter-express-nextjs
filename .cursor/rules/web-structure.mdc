@@ -1,0 +1,34 @@
+---
+description: Next.js App Router component and file structure conventions
+globs: apps/web/**/*.{ts,tsx}
+alwaysApply: false
+---
+
+# Web Structure
+
+## Page files
+
+- `app/**/page.tsx` stays thin — layout and composition only
+- If `page.tsx` exceeds ~120 lines, split into `components/` or a feature folder
+
+## Components
+
+- Extract when reused **or** inline JSX exceeds ~40 lines
+- Move colocated helpers (e.g. `ThemeImage` in `page.tsx`) to `components/` when they grow or are reused
+
+## Styles
+
+- Tailwind CSS v4 utilities in markup; entrypoint is `app/globals.css`
+- Shared tokens in `:root` / `@theme`; page-specific values use arbitrary utilities first
+- Extract `@utility` or `@layer components` only for stable, repeated primitives
+
+## Boundaries
+
+- Server Components by default
+- Add `'use client'` only when hooks, browser APIs, or event handlers require it
+
+## Adding features
+
+1. Page in `app/**/page.tsx` (thin)
+2. Reusable UI in `components/` or feature-scoped folder
+3. Shared logic in `lib/` or `hooks/` when used across routes

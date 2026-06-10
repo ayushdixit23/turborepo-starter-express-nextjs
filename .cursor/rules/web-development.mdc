@@ -1,0 +1,41 @@
+---
+description: Required skills and rules for React/Next.js web development in this monorepo
+globs: apps/web/**/*.{ts,tsx,css}
+alwaysApply: false
+---
+
+# Web Development Workflow
+
+Before writing or editing React/Next.js code in `apps/web` (or any future web app under `apps/`), **read and apply** the skills and rules below.
+
+## Always apply
+
+| Source | Path | Use for |
+|--------|------|---------|
+| Code quality | `.cursor/rules/code-quality.mdc` | Modularity, file size, DRY, control flow |
+| Web structure | `.cursor/rules/web-structure.mdc` | App Router layout, components, RSC boundaries |
+
+## Read these skills first
+
+| Skill | Path | Use for |
+|-------|------|---------|
+| React best practices | `.agents/skills/vercel-react-best-practices/SKILL.md` | Performance, data fetching, bundle size, rerenders |
+| Next.js best practices | `.agents/skills/next-best-practices/SKILL.md` | File conventions, RSC, async APIs, metadata, errors |
+| Frontend design | `.agents/skills/frontend-design/SKILL.md` | New UI, visual direction, typography, layout |
+| Web design guidelines | `.agents/skills/web-design-guidelines/SKILL.md` | Accessibility, UX audits, Vercel interface compliance |
+| Tailwind v4 docs | `.agents/skills/tailwind-4-docs/SKILL.md` | Utilities, `@theme`, variants, migration gotchas |
+
+## When to use each skill
+
+- **Building or changing UI** → frontend-design + vercel-react-best-practices + next-best-practices
+- **Styling with Tailwind** → tailwind-4-docs (check docs snapshot; use `references/engineering-playbook.md` if not initialized)
+- **Reviewing UI/UX or accessibility** → web-design-guidelines (fetch latest guidelines per skill)
+- **Any web code change** → code-quality + web-structure
+
+## Agent checklist
+
+1. Read relevant skill files before implementing — do not rely on memory alone.
+2. Follow `code-quality.mdc` limits; split files/components before they grow.
+3. Prefer Server Components; add `'use client'` only when required.
+4. Compose Tailwind utilities in markup; use `:root` tokens and `@theme` per tailwind-4-docs.
+5. Run `pnpm exec turbo lint check-types --filter=web` after changes.
