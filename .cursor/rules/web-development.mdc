@@ -30,9 +30,17 @@ If `DESIGN.md` exists at the repo root or `apps/web/DESIGN.md`, **read it before
 | Web design guidelines | `.agents/skills/web-design-guidelines/SKILL.md` | Accessibility, UX audits, Vercel interface compliance |
 | Tailwind v4 docs | `.agents/skills/tailwind-4-docs/SKILL.md` | Utilities, `@theme`, variants, migration gotchas |
 
+## shadcn/ui (monorepo)
+
+- **Primitives** — import from `@repo/ui/components/*` (Button, Card, Input, …). Do not copy shadcn primitives into `apps/web`.
+- **App blocks** — login forms, dashboards, etc. live in `apps/web/components/`; CLI adds them there automatically.
+- **Add components** — `pnpm dlx shadcn@latest add <name> -c apps/web` from repo root.
+- **Styling** — use shadcn semantic tokens (`bg-background`, `text-foreground`, `bg-primary`, …) from `packages/ui/src/styles/globals.css`.
+- **Utils** — `import { cn } from '@repo/ui/lib/utils'` (not a duplicate in `apps/web/lib`).
+
 ## When to use each skill
 
-- **Building or changing UI** → `DESIGN.md` (if present) → frontend-design + vercel-react-best-practices + next-best-practices
+- **Building or changing UI** → shadcn primitives first → `DESIGN.md` (if present) → frontend-design + vercel-react-best-practices + next-best-practices
 - **Styling with Tailwind** → `DESIGN.md` tokens (if present) → tailwind-4-docs (check docs snapshot; use `references/engineering-playbook.md` if not initialized)
 - **Reviewing UI/UX or accessibility** → web-design-guidelines (fetch latest guidelines per skill)
 - **Any web code change** → code-quality + web-structure
@@ -43,5 +51,6 @@ If `DESIGN.md` exists at the repo root or `apps/web/DESIGN.md`, **read it before
 2. Read relevant skill files before implementing — do not rely on memory alone.
 3. Follow `code-quality.mdc` limits; split files/components before they grow.
 4. Prefer Server Components; add `'use client'` only when required.
-5. Compose Tailwind utilities in markup; use `:root` tokens and `@theme` per `DESIGN.md` and tailwind-4-docs.
-6. Run `pnpm exec turbo lint check-types --filter=web` after changes.
+5. Prefer `@repo/ui` components over one-off styled elements; compose with `cn()` when needed.
+6. Compose Tailwind utilities in markup; use shadcn tokens, `:root` / `@theme` per `DESIGN.md` and tailwind-4-docs.
+7. Run `pnpm exec turbo lint check-types --filter=web` after changes.

@@ -9,8 +9,8 @@
 | `pnpm dev` | Start all apps (web + api) |
 | `pnpm build` | Production build everything |
 | `pnpm lint` | ESLint (flat config, strict TypeScript rules) |
-| `pnpm format` | Prettier write (no cache) |
-| `pnpm format:check` | Prettier check (for CI) |
+| `pnpm format` | Prettier write + check (fixes then verifies) |
+| `pnpm format:check` | Prettier check only (no writes) |
 | `pnpm check-types` | `tsc --noEmit` across all packages |
 | `pnpm validate` | lint → format:check → check-types (runs pre-commit) |
 | `pnpm exec turbo dev --filter=web` | Web only |
@@ -24,6 +24,7 @@
 apps/web/       Next.js 16 (App Router, React 19, Tailwind CSS v4)
 apps/api/       Express 5 + Mongoose 8 + Zod 4 — entry: src/index.ts
 packages/
+  ui/             @repo/ui — shared shadcn/ui components, hooks, theme CSS
   eslint-config/  @repo/eslint-config — base, node, next presets
   prettier-config/ @repo/prettier-config — semi, singleQuote, trailingComma:all, printWidth:100
   typescript-config/ @repo/typescript-config — base, nextjs, nodejs presets
@@ -52,8 +53,12 @@ packages/
 - Error codes in `src/core/errors/errorCodes.ts` (~50 codes like `VALIDATION_FAILED`, `RESOURCE_NOT_FOUND`).
 
 ### Web
-- **Tailwind CSS v4** — `@import "tailwindcss"` in `app/globals.css`, PostCSS via `@tailwindcss/postcss` in `postcss.config.mjs`.
-- Design tokens in `:root` / `@theme`; use `bg-(--token)` / `text-(--token)` syntax.
+- **shadcn/ui (monorepo)** — shared primitives in `packages/ui` (`@repo/ui`); app blocks/forms in `apps/web/components/`. Both workspaces have `components.json` (must keep `style`, `baseColor`, `iconLibrary` in sync).
+- **Add components** — from repo root: `pnpm dlx shadcn@latest add <name> -c apps/web` (CLI installs UI primitives to `packages/ui`, blocks to `apps/web`).
+- **Imports** — `import { Button } from '@repo/ui/components/button'`; `cn` from `@repo/ui/lib/utils`.
+- **Theme CSS** — shadcn tokens in `packages/ui/src/styles/globals.css`; `apps/web/app/globals.css` imports `@repo/ui/globals.css` and adds app-specific `@theme` / `@source`.
+- **Dark mode** — class-based via `next-themes` (`ThemeProvider` in `apps/web/components/theme-provider.tsx`).
+- **Tailwind CSS v4** — PostCSS via `@tailwindcss/postcss` in `postcss.config.mjs`; `next.config.js` sets `transpilePackages: ['@repo/ui']`.
 - **Agent workflow** — `.cursor/rules/web-development.mdc` requires reading `DESIGN.md` (repo root or `apps/web/`) when present, then React, Next.js, frontend-design, web-design-guidelines, and tailwind-4-docs skills before writing web code.
 - `pnpm check-types` runs `next typegen && tsc --noEmit` — typegen runs first to generate `.next/types/**/*.ts`.
 

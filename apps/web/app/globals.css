@@ -1,29 +1,10 @@
-@import 'tailwindcss';
+@import '../../../packages/ui/src/styles/globals.css';
+
+@source '../**/*.{ts,tsx}';
 
 @theme {
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
-}
-
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-  --gray-alpha-100: rgba(0, 0, 0, 0.05);
-  --gray-alpha-200: rgba(0, 0, 0, 0.08);
-  --button-primary-hover: #383838;
-  --button-secondary-hover: #f2f2f2;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-    --gray-alpha-100: rgba(255, 255, 255, 0.06);
-    --gray-alpha-200: rgba(255, 255, 255, 0.145);
-    --button-primary-hover: #ccc;
-    --button-secondary-hover: #1a1a1a;
-    color-scheme: dark;
-  }
 }
 
 @layer base {

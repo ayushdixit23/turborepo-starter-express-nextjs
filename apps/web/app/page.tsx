@@ -1,7 +1,9 @@
-import React from 'react';
+import { Button } from '@repo/ui/components/button';
 
-const page = () => {
-  return <div className="text-3xl font-bold underline">page</div>;
-};
-
-export default page;
+export default function Page() {
+  return (
+    <main className="flex min-h-svh items-center justify-center">
+      <Button>Get started</Button>
+    </main>
+  );
+}

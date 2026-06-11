@@ -8,7 +8,7 @@
     "format": "turbo run format",
     "format:check": "turbo run format:check",
     "check-types": "turbo run check-types",
-    "validate": "turbo run lint format:check check-types",
+    "validate": "turbo run lint format check-types",
     "prepare": "husky"
   },
   "prettier": "@repo/prettier-config",
