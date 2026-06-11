@@ -54,7 +54,7 @@ packages/
 ### Web
 - **Tailwind CSS v4** — `@import "tailwindcss"` in `app/globals.css`, PostCSS via `@tailwindcss/postcss` in `postcss.config.mjs`.
 - Design tokens in `:root` / `@theme`; use `bg-(--token)` / `text-(--token)` syntax.
-- **Agent workflow** — `.cursor/rules/web-development.mdc` requires reading React, Next.js, frontend-design, web-design-guidelines, and tailwind-4-docs skills before writing web code.
+- **Agent workflow** — `.cursor/rules/web-development.mdc` requires reading `DESIGN.md` (repo root or `apps/web/`) when present, then React, Next.js, frontend-design, web-design-guidelines, and tailwind-4-docs skills before writing web code.
 - `pnpm check-types` runs `next typegen && tsc --noEmit` — typegen runs first to generate `.next/types/**/*.ts`.
 
 ### Code style
@@ -64,7 +64,7 @@ packages/
 - Prettier: `semi: true`, `singleQuote: true`, `trailingComma: "all"`, `printWidth: 100`, `tabWidth: 2`.
 - TypeScript strict mode with `noUncheckedIndexedAccess: true`.
 - Unused variables allowed only with `_` prefix (Node config — API only).
-- `.cursor/rules/` — agents should follow: `code-quality` (always on), `api-architecture` (API), `web-development` + `web-structure` (web/React/Next.js).
+- `.cursor/rules/` — agents should follow: `code-quality` (always on), `api-architecture` (API), `web-development` + `web-structure` + `design-system` (web/React/Next.js).
 
 ## Gotchas
 

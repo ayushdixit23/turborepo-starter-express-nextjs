@@ -1,0 +1,34 @@
+---
+description: Require DESIGN.md as the source of truth for UI, components, and CSS when present
+globs: apps/web/**/*.{ts,tsx,css}
+alwaysApply: false
+---
+
+# Design System (DESIGN.md)
+
+When building or editing UI, React components, or CSS in `apps/web`, **check for a design doc before implementing**.
+
+## Where to look
+
+Check both locations before implementing:
+
+1. `DESIGN.md` — repo-root project design spec
+2. `apps/web/DESIGN.md` — web-app design spec
+
+Read every file that exists. If both exist, `apps/web/DESIGN.md` wins on conflict.
+
+If **neither** file exists, skip this rule and follow `.cursor/rules/web-development.mdc` skills instead.
+
+## Required workflow (when DESIGN.md exists)
+
+1. **Read** the full `DESIGN.md` before writing components, pages, or styles.
+2. **Treat it as source of truth** for colors, typography, spacing, layout, motion, and component patterns.
+3. **Map tokens to code** — use values from `DESIGN.md` in `app/globals.css` (`:root`, `@theme`) and Tailwind utilities; do not invent conflicting palettes or type scales.
+4. **Reuse documented patterns** — prefer components and class conventions named in `DESIGN.md` over one-off styles.
+5. **On conflict** — `DESIGN.md` wins over generic frontend-design skill defaults for this project.
+
+## Scope
+
+Applies to: new pages, components, layout changes, `globals.css`, `@utility` / `@layer` blocks, and any Tailwind class composition for the web app.
+
+Does **not** replace: `code-quality.mdc`, `web-structure.mdc`, React/Next.js performance skills, or accessibility checks from `web-design-guidelines`.
