@@ -9,7 +9,8 @@
       "outputs": [".next/**", "!.next/cache/**", "!.next/dev/**", "dist/**"]
     },
     "lint": {
-      "dependsOn": ["^lint"]
+      "dependsOn": ["^lint"],
+      "outputs": ["node_modules/.cache/eslint/**"]
     },
     "check-types": {
       "dependsOn": ["^check-types"]

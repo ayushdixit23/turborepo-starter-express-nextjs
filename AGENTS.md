@@ -70,10 +70,11 @@ packages/
 - **shadcn/ui (monorepo)** — shared primitives in `packages/ui` (`@repo/ui`); app blocks/forms in `apps/web/components/`. Both workspaces have `components.json` (must keep `style`, `baseColor`, `iconLibrary` in sync).
 - **Add components** — from repo root: `pnpm dlx shadcn@latest add <name> -c apps/web` (CLI installs UI primitives to `packages/ui`, blocks to `apps/web`).
 - **Imports** — `import { Button } from '@repo/ui/components/button'`; `cn` from `@repo/ui/lib/utils`.
+- **`@repo/ui` exports** — shadcn CLI installs primitives as `packages/ui/src/components/<name>.tsx` (flat). Nested paths work via `./components/*/*` (e.g. `@repo/ui/components/ui/button`). Do not add deeper nesting without extending `package.json` `exports`.
 - **Theme CSS** — shadcn tokens in `packages/ui/src/styles/globals.css`; `apps/web/app/globals.css` imports `@repo/ui/globals.css` and adds app-specific `@theme` / `@source`.
 - **Dark mode** — class-based via `next-themes` (`ThemeProvider` in `apps/web/components/theme-provider.tsx`).
 - **Tailwind CSS v4** — PostCSS via `@tailwindcss/postcss` in `postcss.config.mjs`; `next.config.js` sets `transpilePackages: ['@repo/ui']`.
-- **Agent workflow** — `.cursor/rules/web-development.mdc` requires reading `DESIGN.md` (repo root or `apps/web/`) when present, then React, Next.js, frontend-design, web-design-guidelines, and tailwind-4-docs skills before writing web code.
+- **Agent workflow** — `.cursor/rules/web-development.mdc` requires reading `DESIGN.md` (repo root or `apps/web/`) when present, then React, Next.js, frontend-design, web-design-guidelines, tailwind-4-docs, and turborepo skills before writing web code.
 - `pnpm check-types` runs `next typegen && tsc --noEmit` — typegen runs first to generate `.next/types/**/*.ts`.
 
 ### Code style
@@ -92,6 +93,7 @@ packages/
 - **No CI** — no GitHub Actions workflows exist.
 - `packages/eslint-config/README.md` still mentions `@turbo/eslint-config` (outdated) instead of `@repo/eslint-config`.
 - `pnpm validate` is the **pre-merge gate** — lint, `format:check` (not `format`), and type checking. It must not write files; `lint-staged` handles staged formatting before validate runs.
-- `turbo.json`: `build` depends on `^build`, `lint` on `^lint`, `check-types` on `^check-types` — upstream packages build/check first.
+- `turbo.json`: `build` depends on `^build`, `lint` on `^lint`, `check-types` on `^check-types` — upstream packages build/check first. See `.agents/skills/turborepo/SKILL.md` (also listed in `web-development.mdc`).
+- `lint` caches to `node_modules/.cache/eslint/` — package scripts pass `--cache`; Turbo restores cache via `outputs` in `turbo.json`.
 - **Generated files** (do not edit): `next-env.d.ts`, `.next/types/**/*.ts`, `apps/api/dist/`, `apps/web/.next/`.
 - `.npmrc` is empty — no custom npm config.

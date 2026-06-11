@@ -29,6 +29,7 @@ If `DESIGN.md` exists at the repo root or `apps/web/DESIGN.md`, **read it before
 | Frontend design | `.agents/skills/frontend-design/SKILL.md` | New UI, visual direction, typography, layout |
 | Web design guidelines | `.agents/skills/web-design-guidelines/SKILL.md` | Accessibility, UX audits, Vercel interface compliance |
 | Tailwind v4 docs | `.agents/skills/tailwind-4-docs/SKILL.md` | Utilities, `@theme`, variants, migration gotchas |
+| Turborepo | `.agents/skills/turborepo/SKILL.md` | Task pipeline, `dependsOn` / `^build`, `--filter`, caching |
 
 ## shadcn/ui (monorepo)
 
@@ -44,6 +45,7 @@ If `DESIGN.md` exists at the repo root or `apps/web/DESIGN.md`, **read it before
 - **Styling with Tailwind** → `DESIGN.md` tokens (if present) → tailwind-4-docs (check docs snapshot; use `references/engineering-playbook.md` if not initialized)
 - **Reviewing UI/UX or accessibility** → web-design-guidelines (fetch latest guidelines per skill)
 - **Any web code change** → code-quality + web-structure
+- **Scripts, turbo tasks, or monorepo wiring** → turborepo skill (read before changing `package.json` scripts or `turbo.json`)
 
 ## Agent checklist
 

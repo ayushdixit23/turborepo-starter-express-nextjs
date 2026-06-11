@@ -2,12 +2,9 @@ import './globals.css';
 
 import { cn } from '@repo/ui/lib/utils';
 import type { Metadata } from 'next';
-import { Geist } from 'next/font/google';
 import localFont from 'next/font/local';
 
 import { ThemeProvider } from '@/components/theme-provider';
-
-const geist = Geist({ subsets: ['latin'], variable: '--font-sans' });
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -29,10 +26,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning className={cn('font-sans', geist.variable)}>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} bg-background font-sans text-foreground antialiased`}
-      >
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={cn(geistSans.variable, geistMono.variable, 'font-sans')}
+    >
+      <body className="bg-background font-sans text-foreground antialiased">
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

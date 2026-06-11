@@ -6,11 +6,12 @@
   "exports": {
     "./globals.css": "./src/styles/globals.css",
     "./components/*": "./src/components/*.tsx",
+    "./components/*/*": "./src/components/*/*.tsx",
     "./lib/*": "./src/lib/*.ts",
     "./hooks/*": "./src/hooks/*.ts"
   },
   "scripts": {
-    "lint": "eslint --max-warnings 0",
+    "lint": "eslint --max-warnings 0 --cache --cache-location node_modules/.cache/eslint",
     "check-types": "tsc --noEmit",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
