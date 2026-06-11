@@ -12,7 +12,7 @@
   "scripts": {
     "lint": "eslint --max-warnings 0",
     "check-types": "tsc --noEmit",
-    "format": "prettier --write . && prettier --check .",
+    "format": "prettier --write .",
     "format:check": "prettier --check ."
   },
   "prettier": "@repo/prettier-config",

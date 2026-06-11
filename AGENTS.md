@@ -4,19 +4,31 @@
 
 ## Essential Commands (run from root)
 
-| Command | What it does |
-|---|---|
-| `pnpm dev` | Start all apps (web + api) |
-| `pnpm build` | Production build everything |
-| `pnpm lint` | ESLint (flat config, strict TypeScript rules) |
-| `pnpm format` | Prettier write + check (fixes then verifies) |
-| `pnpm format:check` | Prettier check only (no writes) |
-| `pnpm check-types` | `tsc --noEmit` across all packages |
-| `pnpm validate` | lint → format:check → check-types (runs pre-commit) |
-| `pnpm exec turbo dev --filter=web` | Web only |
-| `pnpm exec turbo dev --filter=api` | API only |
+| Command                            | What it does                                           |
+| ---------------------------------- | ------------------------------------------------------ |
+| `pnpm dev`                         | Start all apps (web + api)                             |
+| `pnpm build`                       | Production build everything                            |
+| `pnpm lint`                        | ESLint (flat config, strict TypeScript rules)          |
+| `pnpm format`                      | `prettier --write` across all packages (mutates files) |
+| `pnpm format:check`                | `prettier --check` across all packages (read-only)     |
+| `pnpm check-types`                 | `tsc --noEmit` across all packages                     |
+| `pnpm validate`                    | lint → format:check → check-types (read-only gate)     |
+| `pnpm exec turbo dev --filter=web` | Web only                                               |
+| `pnpm exec turbo dev --filter=api` | API only                                               |
 
-**Pre-commit hook** runs `pnpm validate` (can be slow). **Pre-push hook** runs `pnpm build`.
+### Formatting (`format` vs `format:check`)
+
+Per-package scripts in `apps/web`, `apps/api`, and `packages/ui`:
+
+| Script         | Command              | Mutates files? |
+| -------------- | -------------------- | -------------- |
+| `format`       | `prettier --write .` | Yes            |
+| `format:check` | `prettier --check .` | No             |
+
+- **`pnpm format`** — run manually to fix formatting repo-wide (before a PR, after a merge, or when `validate` fails on format).
+- **`pnpm format:check`** — verify only; used by `validate` and safe for CI. Never use `format` inside hooks or gates.
+
+**Pre-commit** (`lint-staged` → `validate`): formats staged files, then runs the read-only gate (lint + format:check + check-types). **Pre-push** runs `pnpm build`.
 
 ## Architecture
 
@@ -44,6 +56,7 @@ packages/
 ## Key Conventions
 
 ### API (see `apps/api/AGENTS.md` for full detail)
+
 - **Express 5.x** — `req.query` and `req.params` are **read-only** (do not reassign).
 - **Zod 4.x** — use `.parse()`, not `.parseAsync()` (different from Zod 3).
 - `tsx` for dev (not ts-node): `tsx watch src/index.ts`.
@@ -53,6 +66,7 @@ packages/
 - Error codes in `src/core/errors/errorCodes.ts` (~50 codes like `VALIDATION_FAILED`, `RESOURCE_NOT_FOUND`).
 
 ### Web
+
 - **shadcn/ui (monorepo)** — shared primitives in `packages/ui` (`@repo/ui`); app blocks/forms in `apps/web/components/`. Both workspaces have `components.json` (must keep `style`, `baseColor`, `iconLibrary` in sync).
 - **Add components** — from repo root: `pnpm dlx shadcn@latest add <name> -c apps/web` (CLI installs UI primitives to `packages/ui`, blocks to `apps/web`).
 - **Imports** — `import { Button } from '@repo/ui/components/button'`; `cn` from `@repo/ui/lib/utils`.
@@ -63,6 +77,7 @@ packages/
 - `pnpm check-types` runs `next typegen && tsc --noEmit` — typegen runs first to generate `.next/types/**/*.ts`.
 
 ### Code style
+
 - ESLint 9 flat config with `typescript-eslint/strict` + `strictTypeChecked` + `projectService: true`.
 - `simple-import-sort` enforced (both imports and exports).
 - Complexity limits: max 250 lines/file, 60 lines/function, complexity 15, max-depth 4, max-params 5.
@@ -76,7 +91,7 @@ packages/
 - **No test framework** — no Jest, Vitest, Playwright. Add one before writing tests.
 - **No CI** — no GitHub Actions workflows exist.
 - `packages/eslint-config/README.md` still mentions `@turbo/eslint-config` (outdated) instead of `@repo/eslint-config`.
-- `pnpm validate` is the **pre-merge gate** — runs lint, format check, and type checking together. Any of these failing blocks commits.
+- `pnpm validate` is the **pre-merge gate** — lint, `format:check` (not `format`), and type checking. It must not write files; `lint-staged` handles staged formatting before validate runs.
 - `turbo.json`: `build` depends on `^build`, `lint` on `^lint`, `check-types` on `^check-types` — upstream packages build/check first.
 - **Generated files** (do not edit): `next-env.d.ts`, `.next/types/**/*.ts`, `apps/api/dist/`, `apps/web/.next/`.
 - `.npmrc` is empty — no custom npm config.

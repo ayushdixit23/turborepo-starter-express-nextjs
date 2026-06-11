@@ -8,13 +8,17 @@
     "format": "turbo run format",
     "format:check": "turbo run format:check",
     "check-types": "turbo run check-types",
-    "validate": "turbo run lint format check-types",
+    "validate": "turbo run lint format:check check-types",
     "prepare": "husky"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,mjs,cjs,json,md,css,yml,yaml}": "prettier --write"
   },
   "prettier": "@repo/prettier-config",
   "devDependencies": {
     "@repo/prettier-config": "workspace:*",
     "husky": "^9.1.7",
+    "lint-staged": "^17.0.7",
     "prettier": "^3.7.4",
     "turbo": "^2.9.17",
     "typescript": "5.9.2"

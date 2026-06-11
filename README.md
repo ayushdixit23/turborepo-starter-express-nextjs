@@ -4,12 +4,12 @@ A reusable [Turborepo](https://turborepo.dev) monorepo starter with a Next.js fr
 
 ## Stack
 
-| Layer | Tech |
-|-------|------|
-| Frontend | [Next.js](https://nextjs.org/) (`apps/web`) |
-| Backend | [Express](https://expressjs.com/) + MongoDB (`apps/api`) |
+| Layer    | Tech                                                                    |
+| -------- | ----------------------------------------------------------------------- |
+| Frontend | [Next.js](https://nextjs.org/) (`apps/web`)                             |
+| Backend  | [Express](https://expressjs.com/) + MongoDB (`apps/api`)                |
 | Monorepo | [Turborepo](https://turborepo.dev) + [pnpm](https://pnpm.io) workspaces |
-| Tooling | TypeScript, ESLint, Prettier, Husky |
+| Tooling  | TypeScript, ESLint, Prettier, Husky, lint-staged                        |
 
 ## What's inside
 
@@ -45,15 +45,17 @@ pnpm dev
 
 ## Scripts
 
-| Command | Description |
-|---------|-------------|
-| `pnpm dev` | Start all apps in dev mode |
-| `pnpm build` | Production build |
-| `pnpm lint` | ESLint across the repo |
-| `pnpm format` | Auto-format with Prettier |
-| `pnpm format:check` | Check formatting (CI-friendly) |
-| `pnpm check-types` | TypeScript type checking |
-| `pnpm validate` | lint + format:check + check-types |
+| Command             | Description                                             |
+| ------------------- | ------------------------------------------------------- |
+| `pnpm dev`          | Start all apps in dev mode                              |
+| `pnpm build`        | Production build                                        |
+| `pnpm lint`         | ESLint across the repo                                  |
+| `pnpm format`       | `prettier --write` — fixes formatting (mutates files)   |
+| `pnpm format:check` | `prettier --check` — verify formatting only (no writes) |
+| `pnpm check-types`  | TypeScript type checking                                |
+| `pnpm validate`     | lint + format:check + check-types (read-only gate)      |
+
+`format` writes; `format:check` only verifies. Use `pnpm format` manually when you need to fix the whole repo; hooks and `validate` always use `format:check`.
 
 Run a single app:
 
@@ -66,10 +68,12 @@ pnpm exec turbo dev --filter=api
 
 Installed automatically via `pnpm install`:
 
-| Hook | Runs |
-|------|------|
-| **pre-commit** | `pnpm validate` |
-| **pre-push** | `pnpm build` |
+| Hook           | Runs                                                                 |
+| -------------- | -------------------------------------------------------------------- |
+| **pre-commit** | `lint-staged` (Prettier `--write` on staged files) → `pnpm validate` |
+| **pre-push**   | `pnpm build`                                                         |
+
+On commit, staged files are auto-formatted first; then `validate` checks lint, formatting (`format:check`), and types across the repo without writing files. If validate fails, run `pnpm format` to fix formatting repo-wide, fix lint/types, and try again.
 
 ## Reusing this starter
 
