@@ -8,6 +8,7 @@
     "format": "turbo run format",
     "format:check": "turbo run format:check",
     "check-types": "turbo run check-types",
+    "start": "turbo run start",
     "validate": "turbo run lint format:check check-types",
     "prepare": "husky"
   },
