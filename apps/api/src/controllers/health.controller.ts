@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import mongoose from 'mongoose';
 import os from 'os';
 
-import { NODE_ENV } from '../config/env.js';
+import { NODE_ENV, READINESS_MEMORY_THRESHOLD } from '../config/env.js';
 import { AppError } from '../core/errors/AppError.js';
 import { ERROR_CODES } from '../core/errors/errorCodes.js';
 import { SuccessResponse } from '../core/responses/SuccessResponse.js';
@@ -53,7 +53,7 @@ export const getReadiness = (req: Request, res: Response): Response => {
     ]);
   }
 
-  if (memoryPercent > 90) {
+  if (memoryPercent > READINESS_MEMORY_THRESHOLD) {
     throw new AppError('Service is not ready', 503, ERROR_CODES.SERVICE_UNAVAILABLE, [
       { field: 'memory', message: 'Memory usage too high' },
     ]);

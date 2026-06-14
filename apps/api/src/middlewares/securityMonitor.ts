@@ -1,5 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
 
+import { SECURITY_MAX_PAYLOAD_SIZE } from '../config/env.js';
+import { AppError } from '../core/errors/AppError.js';
+import { ERROR_CODES } from '../core/errors/errorCodes.js';
 import { logger } from '../utils/logger.js';
 
 interface SuspiciousActivity {
@@ -22,11 +25,7 @@ const checkSuspiciousActivity = (req: Request): SuspiciousActivity[] => {
 
   if (req.body && typeof req.body === 'object') {
     const bodyStr = JSON.stringify(req.body).toLowerCase();
-    if (
-      bodyStr.includes('drop table') ||
-      bodyStr.includes('drop table') ||
-      bodyStr.includes('union select')
-    ) {
+    if (bodyStr.includes('drop table') || bodyStr.includes('union select')) {
       activities.push({
         type: 'SQL_INJECTION_ATTEMPT',
         severity: 'high',
@@ -36,7 +35,7 @@ const checkSuspiciousActivity = (req: Request): SuspiciousActivity[] => {
   }
 
   const contentLength = parseInt(req.get('content-length') || '0', 10);
-  if (contentLength > 5 * 1024 * 1024) {
+  if (contentLength > SECURITY_MAX_PAYLOAD_SIZE) {
     activities.push({
       type: 'LARGE_PAYLOAD',
       severity: 'medium',
@@ -73,6 +72,15 @@ export const securityMonitor = (req: Request, _res: Response, next: NextFunction
       },
       'Suspicious activity detected',
     );
+
+    if (activity.severity === 'high') {
+      next(
+        new AppError('Request blocked for security reasons', 403, ERROR_CODES.SUSPICIOUS_ACTIVITY, [
+          { message: activity.message },
+        ]),
+      );
+      return;
+    }
   }
 
   next();

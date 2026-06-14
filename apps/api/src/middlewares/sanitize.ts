@@ -1,36 +1,31 @@
 import { NextFunction, Request, Response } from 'express';
+import sanitizeHtml from 'sanitize-html';
 
-const dangerousPatterns = [
-  /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,
-  /<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi,
-  /javascript:/gi,
-  /on\w+\s*=/gi,
-  /data:\s*text\/html/gi,
-  /<object[^>]*>/gi,
-  /<embed[^>]*>/gi,
-  /<applet[^>]*>/gi,
-  /<meta[^>]*>/gi,
-  /<link[^>]*>/gi,
-  /<base[^>]*>/gi,
-];
+const MAX_DEPTH = 10;
 
-const sanitizeValue = (value: unknown): unknown => {
+const sanitizeOptions: sanitizeHtml.IOptions = {
+  allowedTags: [],
+  allowedAttributes: {},
+  disallowedTagsMode: 'discard',
+};
+
+const sanitizeValue = (value: unknown, depth: number = 0): unknown => {
+  if (depth > MAX_DEPTH) {
+    return value;
+  }
+
   if (typeof value === 'string') {
-    let sanitized = value;
-    for (const pattern of dangerousPatterns) {
-      sanitized = sanitized.replace(pattern, '');
-    }
-    return sanitized;
+    return sanitizeHtml(value, sanitizeOptions);
   }
 
   if (Array.isArray(value)) {
-    return value.map(sanitizeValue);
+    return value.map((item) => sanitizeValue(item, depth + 1));
   }
 
   if (value && typeof value === 'object') {
     const sanitized: Record<string, unknown> = {};
     for (const [key, val] of Object.entries(value)) {
-      sanitized[key] = sanitizeValue(val);
+      sanitized[key] = sanitizeValue(val, depth + 1);
     }
     return sanitized;
   }
@@ -40,8 +35,7 @@ const sanitizeValue = (value: unknown): unknown => {
 
 export const sanitizeMiddleware = (req: Request, _res: Response, next: NextFunction): void => {
   if (req.body && typeof req.body === 'object') {
-    const sanitized = sanitizeValue(req.body);
-    req.body = sanitized;
+    req.body = sanitizeValue(req.body);
   }
 
   next();

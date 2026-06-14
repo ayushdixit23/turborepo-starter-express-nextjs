@@ -54,3 +54,18 @@ export const MONGO_MAX_IDLE_TIME_MS = parseInt(
   getEnvVariable('MONGO_MAX_IDLE_TIME_MS', '30000'),
   10,
 );
+
+// Request timeout
+export const REQUEST_TIMEOUT_MS = parseInt(getEnvVariable('REQUEST_TIMEOUT_MS', '60000'), 10);
+
+// Health check readiness memory threshold (percent, 0-100)
+export const READINESS_MEMORY_THRESHOLD = parseInt(
+  getEnvVariable('READINESS_MEMORY_THRESHOLD', '90'),
+  10,
+);
+
+// Security monitoring
+export const SECURITY_MAX_PAYLOAD_SIZE = parseInt(
+  getEnvVariable('SECURITY_MAX_PAYLOAD_SIZE', '5242880'),
+  10,
+); // 5MB
